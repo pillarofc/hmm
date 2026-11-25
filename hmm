@@ -1,0 +1,88 @@
+import java.util.Scanner;
+
+class Kendaraan {
+    protected String namaKendaraan;
+    protected double tarifSewa; // per hari
+
+    public Kendaraan(String namaKendaraan, double tarifSewa) {
+        this.namaKendaraan = namaKendaraan;
+        this.tarifSewa = tarifSewa;
+    }
+
+    public double hitungBiayaSewa(int lamaHari) {
+        return tarifSewa * lamaHari;
+    }
+
+    public String getNamaKendaraan() {
+        return namaKendaraan;
+    }
+}
+
+class Mobil extends Kendaraan {
+    private static final double BIAYA_ASURANSI_PER_HARI = 50000;
+
+    public Mobil(String namaKendaraan, double tarifSewa) {
+        super(namaKendaraan, tarifSewa);
+    }
+
+    @Override
+    public double hitungBiayaSewa(int lamaHari) {
+        return (tarifSewa + BIAYA_ASURANSI_PER_HARI) * lamaHari;
+    }
+}
+
+class Motor extends Kendaraan {
+    private static final double BIAYA_HELM_PER_HARI = 10000;
+
+    public Motor(String namaKendaraan, double tarifSewa) {
+        super(namaKendaraan, tarifSewa);
+    }
+
+    @Override
+    public double hitungBiayaSewa(int lamaHari) {
+        return (tarifSewa + BIAYA_HELM_PER_HARI) * lamaHari;
+    }
+}
+
+public class MainPenyewaan {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        Kendaraan mobil = new Mobil("Toyota Avanza", 300000);
+        Kendaraan motor = new Motor("Honda Vario 160", 85000);
+
+        System.out.println("=== PROGRAM PENYEWAAN KENDARAAN ===");
+        System.out.println("1. " + mobil.getNamaKendaraan() + " (Tarif dasar: Rp300.000/hari + asuransi Rp50.000/hari)");
+        System.out.println("2. " + motor.getNamaKendaraan() + " (Tarif dasar: Rp85.000/hari + helm Rp10.000/hari)");
+        System.out.print("Pilih kendaraan (1/2): ");
+        int pilihan = scanner.nextInt();
+
+        System.out.print("Masukkan lama penyewaan (hari): ");
+        int lamaHari = scanner.nextInt();
+
+        if (lamaHari <= 0) {
+            System.out.println("Lama penyewaan harus lebih dari 0 hari.");
+            scanner.close();
+            return;
+        }
+
+        Kendaraan kendaraanDipilih;
+        if (pilihan == 1) {
+            kendaraanDipilih = mobil;
+        } else if (pilihan == 2) {
+            kendaraanDipilih = motor;
+        } else {
+            System.out.println("Pilihan kendaraan tidak valid.");
+            scanner.close();
+            return;
+        }
+
+        double totalBiaya = kendaraanDipilih.hitungBiayaSewa(lamaHari);
+        System.out.println("\n--- Ringkasan Sewa ---");
+        System.out.println("Kendaraan     : " + kendaraanDipilih.getNamaKendaraan());
+        System.out.println("Lama Sewa     : " + lamaHari + " hari");
+        System.out.printf("Total Biaya   : Rp%,.0f%n", totalBiaya);
+
+        scanner.close();
+    }
+} 
